@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - Docker
+
+before_install:
+  - docker build -t rogerrc12/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI rogerrc12/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t rogerrc12/multi-client ./client
+  - docker build -t rogerrc12/multi-nginx ./nginx
+  - docker build -t rogerrc12/multi-server ./server
+  - docker build -t rogerrc12/multi-worker ./worker
+  # Log into docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # push images to docker hub
+  - docker push rogerrc12/multi-client
+  - docker push rogerrc12/multi-nginx
+  - docker push rogerrc12/multi-server
+  - docker push rogerrc12/multi-worker
