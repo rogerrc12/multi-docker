@@ -26,3 +26,9 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.link-nav {
+  display: inline-block;
+  margin: 0 .7rem;
+  padding: 10px 15px;
+}
